@@ -50,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="result">
         <?php if ($result === false): ?>
-            <p> <strong><?= $searched ?></strong> is not a valid word.</p>
+            <p> <strong><?= $searched ?></strong> is not a valid word</p>
         <?php elseif (is_array($result)): ?>
             <p class='word-result'> <strong><?= $searched ?></strong></p>
-            <p class='definition'> <?= $definition ?> [<?= $partOfSpeech ?>]</p>
+            <p class='definition'> <?= $definition ?> <?php if ($partOfSpeech): ?>[<?= $partOfSpeech ?>]<?php endif; ?></p>
             <p class='pronunciation'> <?= $pronunciation ?> </p>
         <?php endif; ?>
     </div>
