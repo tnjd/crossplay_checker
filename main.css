@@ -40,6 +40,7 @@ h1 {
   align-items: center;
   width: fit-content;
   flex-grow: 1;
+  max-width: calc(clamp(30rem, 80vw, 60rem) - 10rem);
 }
 
 .result {
@@ -81,6 +82,7 @@ input {
   flex-grow: 1;
   font-size: large;
   border-right: none;
+  min-width: 5rem;
 }
 
 button {
