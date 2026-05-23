@@ -2,23 +2,20 @@
 require_once('db.php');
 
 $result = null;
-$searched_word = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $searched_unsafe = trim($_POST['word'] ?? '');
-    $searched = htmlspecialchars($searched_unsafe);
+$searched_unsafe = trim($_GET['word'] ?? '');
+$searched = htmlspecialchars($searched_unsafe);
 
-    if ($searched_unsafe !== '') {
-        $words_db = setup_db();
-        $dbresult = query_word($words_db, $searched_unsafe);
-        if (count($dbresult) === 0) {
-            $result = false;
-        } else {
-            $result = $dbresult[0];
-            $definition = $result[0];
-            $partOfSpeech = $result[1];
-            $pronunciation = $result[2];
-        }
+if ($searched_unsafe !== '') {
+    $words_db = setup_db();
+    $dbresult = query_word($words_db, $searched_unsafe);
+    if (count($dbresult) === 0) {
+        $result = false;
+    } else {
+        $result = $dbresult[0];
+        $definition = $result[0];
+        $partOfSpeech = $result[1];
+        $pronunciation = $result[2];
     }
 }
 
@@ -35,7 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@200..800&family=Noto+Emoji:wght@300..700&display=swap" rel="stylesheet">
+<?php if ($searched === ''): ?>
 <title>Crossplay Word Checker</title>
+<?php else: ?>
+<title>Crossplay Word Checker: <?= $searched ?></title>
+<?php endif; ?>
 </head>
 <body>
 
@@ -45,21 +46,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Crossplay Word Checker
     </h1>
 
-    <form method="POST">
+    <form method="GET">
         <input type="text" name="word" value="<?= htmlspecialchars($searched) ?>"><button type="submit">🔍</button>
     </form>
 
-    <div class="result">
-        <?php if ($result === false): ?>
-            <p> <strong><?= $searched ?></strong> is not a valid word</p>
-        <?php elseif (is_array($result)): ?>
-            <p class='word-result'> <strong><?= $searched ?></strong></p>
-            <p class='definition'> <?= $definition ?> <?php if ($partOfSpeech): ?>[<?= $partOfSpeech ?>]<?php endif; ?></p>
-            <?php if ($partOfSpeech): ?>
-                <p class='pronunciation'> /<?= $pronunciation ?>/ </p>
+    <?php if ($searched !== ''): ?>
+        <div class="result">
+            <?php if ($result === false): ?>
+                <p> <strong><?= $searched ?></strong> is not a valid word</p>
+            <?php elseif (is_array($result)): ?>
+                <p class='word-result'> <strong><?= $searched ?></strong></p>
+                <p class='definition'> <?= $definition ?> <?php if ($partOfSpeech): ?>[<?= $partOfSpeech ?>]<?php endif; ?></p>
+                <?php if ($partOfSpeech): ?>
+                    <p class='pronunciation'> /<?= $pronunciation ?>/ </p>
+                <?php endif; ?>
             <?php endif; ?>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 </div>
 </div>
 </body>
