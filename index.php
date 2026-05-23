@@ -55,7 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php elseif (is_array($result)): ?>
             <p class='word-result'> <strong><?= $searched ?></strong></p>
             <p class='definition'> <?= $definition ?> <?php if ($partOfSpeech): ?>[<?= $partOfSpeech ?>]<?php endif; ?></p>
-            <p class='pronunciation'> <?= $pronunciation ?> </p>
+            <?php if ($partOfSpeech): ?>
+                <p class='pronunciation'> /<?= $pronunciation ?>/ </p>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 </div>
